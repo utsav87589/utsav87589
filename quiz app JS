@@ -1,0 +1,125 @@
+//we had declared a object below for the questions we want to put in our app
+
+const quizData = [
+    {
+        question : 'What is the jersey number of Steve Smith?',
+        a : '49',
+        b : '66',
+        c : '22',
+        d : '16',
+        correct : 'a'
+    },{
+        question : 'What is the highest score of martin guptill in ODIs?',
+        a : '189*',
+        b : '264',
+        c : '141*',
+        d : '237*',
+        correct : 'd'
+    },{
+        question : 'How many ODI centuries Steven Smith had scored against India?',
+        a : '5',
+        b : '4',
+        c: '10',
+        d : '7',
+        correct : 'a'
+    },{
+        question : 'What was the Steve Smith score in CWC2015 semi-final 2 at SCG?',
+        a : '100',
+        b : '105',
+        c : '93',
+        d : '140',
+        correct : 'b'
+    }
+]
+
+//console.log(quizData);
+
+//we start targeting the HTMl elements by here to work on button when clicked and to show the questions that we had earlier and later part like loading question etc.
+
+const answerEls = document.querySelectorAll(".answer");
+const questionEl = document.getElementById('question')
+const quiz = document.getElementById('quiz');
+
+const a_text = document.getElementById('a_text');
+const b_text = document.getElementById('b_text');
+const c_text = document.getElementById('c_text');
+const d_text = document.getElementById('d_text');
+const submitBtn = document.getElementById('submit');
+
+//we declare currentQuiz for to load the above quiz and to show on display.
+let currentQuiz = 0;
+
+//we want to tell in the end that how much of his answers were right.
+let score = 0;
+
+//here we will load the questions on display
+loadQuiz();
+
+function loadQuiz(){
+
+    //to deselect answer so that as we move to next one it will not had chosed one already
+    deselectAnswer();
+
+    //here we are telling that it's our data to show i.e first questions
+    const currentQuizData = quizData[currentQuiz];
+
+    //from here we had started showing the questions on display and started targeting the inner html
+    questionEl.innerText = currentQuizData.question;
+
+    a_text.innerText = currentQuizData.a;
+    b_text.innerText = currentQuizData.b;
+    c_text.innerText = currentQuizData.c;
+    d_text.innerText = currentQuizData.d;
+
+    
+}
+
+//don't get it.
+function getSelected(){
+
+    //we are getting all elements with class answer
+    const answerEls = document.querySelectorAll(".answer");
+
+    //
+    let answer = undefined
+
+    answerEls.forEach((answerEl) => {
+        if(answerEl.checked){
+            answer = answerEl.id;
+        }
+    })
+
+    return answer;
+
+}
+
+function deselectAnswer(){
+    answerEls.forEach((answerEl) => {
+        answerEl.checked = false;
+    })
+}
+
+
+//from there we start working that what will happen after we click button
+submitBtn.addEventListener("click", () =>{
+
+    const answer = getSelected();
+
+    //if answer selected is the correct one.
+    if(answer){
+
+        if(answer === quizData[currentQuiz].correct){
+            score++;
+        }
+
+        currentQuiz++;
+
+        if(currentQuiz < quizData.length){
+            loadQuiz();
+        }else{
+            quiz.innerHTML = `<h2>You answered correctly at ${score}/${quizData.length} questions.</h2><button onclick = "location.reload()">Reload</button>`
+        }
+
+    }
+
+})
